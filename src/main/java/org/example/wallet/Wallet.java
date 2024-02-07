@@ -1,46 +1,46 @@
 package org.example.wallet;
 
 public class Wallet {
-    private final Currency currency;
-    private int balance = 0;
+    private Money balance;
 
     public Wallet(Currency currency) {
-        this.currency = currency;
+        this.balance = new Money(0, currency);
     }
 
-    public void add(int amount, Currency currency) {
-        if (this.currency.equals(currency)) {
-            this.balance += amount;
-            return;
+    public void deposit(Money money) {
+        int convertedAmount = getConvertedAmount(money.getAmount(), money.getCurrency());
+        this.balance = new Money(this.balance.getAmount() + convertedAmount, this.balance.getCurrency());
+    }
+
+    private int getConvertedAmount(int amount, Currency currency) {
+        if (this.balance.getCurrency().equals(currency)) {
+            return amount;
         }
-        handleDifferentCurrency(amount, currency);
-    }
-
-    private void handleDifferentCurrency(int amount, Currency currency) {
-        if (this.currency.equals(Currency.USD)) {
+        if (this.balance.getCurrency().equals(Currency.USD)) {
             if (currency.equals(Currency.INR)) {
-                this.balance += amount / 2;
+                return amount / 2;
             } else if (currency.equals(Currency.EUR)) {
-                this.balance += amount * 2;
+                return amount * 2;
             }
-        } else if (this.currency.equals(Currency.INR)) {
+        } else if (this.balance.getCurrency().equals(Currency.INR)) {
             if (currency.equals(Currency.USD)) {
-                this.balance += amount * 2;
+                return amount * 2;
             } else if (currency.equals(Currency.EUR)) {
-                this.balance += amount * 4;
+                return amount * 4;
             }
         } else {
             if (currency.equals(Currency.INR)) {
-                this.balance += amount / 4;
+                return amount / 4;
             } else if (currency.equals(Currency.USD)) {
-                this.balance += amount / 2;
+                return amount / 2;
             }
         }
+        return amount;
     }
 
     //TODO: deduct money
 
-    public int getBalance() {
+    public Money getBalance() {
         return this.balance;
     }
 }
