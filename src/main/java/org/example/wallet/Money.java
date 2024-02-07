@@ -15,10 +15,6 @@ public class Money {
         return amount;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -30,5 +26,34 @@ public class Money {
     @Override
     public int hashCode() {
         return Objects.hash(amount, currency);
+    }
+
+    Money add(Money other) {
+        int convertedAmount = 0;
+        int amount = other.amount;
+        Currency currency = other.currency;
+        if (this.currency.equals(currency)) {
+            convertedAmount = amount;
+        } else {
+            if (this.currency.equals(Currency.USD)) {
+                if (currency.equals(Currency.INR)) {
+                    convertedAmount = amount / 2;
+                } else if (currency.equals(Currency.EUR)) {
+                    convertedAmount = amount * 2;
+                }
+            } else if (this.currency.equals(Currency.INR)) {
+                if (currency.equals(Currency.USD)) {
+                    convertedAmount = amount * 2;
+                } else if (currency.equals(Currency.EUR)) {
+                    convertedAmount = amount * 4;
+                }
+            } else { if (currency.equals(Currency.INR)) {
+                convertedAmount = amount / 4;
+            } else if (currency.equals(Currency.USD)) {
+                convertedAmount = amount / 2;
+            }
+            }
+        }
+        return new Money(getAmount() + convertedAmount, this.currency);
     }
 }
