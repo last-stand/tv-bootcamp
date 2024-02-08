@@ -11,25 +11,13 @@ public class Money {
         this.currency = currency;
     }
 
-    Money add(Money other) {
-        int convertedAmount = 0;
-        int amount = other.amount;
-        Currency currency = other.currency;
-        if (this.currency.equals(currency)) {
-            convertedAmount = amount;
-        } else {
-            convertedAmount = convertTo(amount, currency);
-        }
-        return new Money(getAmount() + convertedAmount, this.currency);
+    public Money add(Money other) {
+        return new Money(this.amount + convertTo(other.amount, other.currency), this.currency);
     }
 
     private int convertTo(int amount, Currency currency) {
         int inrValue = amount * currency.getConversionRate();
         return inrValue / this.currency.getConversionRate();
-    }
-
-    public int getAmount() {
-        return amount;
     }
 
     @Override
