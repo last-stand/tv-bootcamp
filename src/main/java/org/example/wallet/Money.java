@@ -11,6 +11,23 @@ public class Money {
         this.currency = currency;
     }
 
+    Money add(Money other) {
+        int convertedAmount = 0;
+        int amount = other.amount;
+        Currency currency = other.currency;
+        if (this.currency.equals(currency)) {
+            convertedAmount = amount;
+        } else {
+            convertedAmount = convertTo(amount, currency);
+        }
+        return new Money(getAmount() + convertedAmount, this.currency);
+    }
+
+    private int convertTo(int amount, Currency currency) {
+        int inrValue = amount * currency.getConversionRate();
+        return inrValue / this.currency.getConversionRate();
+    }
+
     public int getAmount() {
         return amount;
     }
@@ -26,34 +43,5 @@ public class Money {
     @Override
     public int hashCode() {
         return Objects.hash(amount, currency);
-    }
-
-    Money add(Money other) {
-        int convertedAmount = 0;
-        int amount = other.amount;
-        Currency currency = other.currency;
-        if (this.currency.equals(currency)) {
-            convertedAmount = amount;
-        } else {
-            if (this.currency.equals(Currency.USD)) {
-                if (currency.equals(Currency.INR)) {
-                    convertedAmount = amount / 2;
-                } else if (currency.equals(Currency.EUR)) {
-                    convertedAmount = amount * 2;
-                }
-            } else if (this.currency.equals(Currency.INR)) {
-                if (currency.equals(Currency.USD)) {
-                    convertedAmount = amount * 2;
-                } else if (currency.equals(Currency.EUR)) {
-                    convertedAmount = amount * 4;
-                }
-            } else { if (currency.equals(Currency.INR)) {
-                convertedAmount = amount / 4;
-            } else if (currency.equals(Currency.USD)) {
-                convertedAmount = amount / 2;
-            }
-            }
-        }
-        return new Money(getAmount() + convertedAmount, this.currency);
     }
 }
