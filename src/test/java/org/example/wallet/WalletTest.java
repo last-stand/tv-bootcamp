@@ -203,4 +203,17 @@ class WalletTest {
             assertEquals(new Money(4, Currency.EUR), wallet.getBalance());
         }
     }
+
+    @Nested
+    class BHT {
+        @Test
+        void balanceShouldBe_10_BHTAfterAdding_10_BHT() {
+            Wallet wallet = new Wallet(Currency.BHT);
+            Money bht10 = new Money(10, Currency.BHT);
+
+            wallet.deposit(bht10);
+
+            assertEquals(bht10, wallet.getBalance());
+        }
+    }
 }
