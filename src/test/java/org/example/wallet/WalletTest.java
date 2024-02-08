@@ -3,6 +3,9 @@ package org.example.wallet;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class WalletTest {
@@ -97,7 +100,7 @@ class WalletTest {
 
             assertEquals(usd10, wallet.getBalance());
         }
-        
+
         @Test
         void balanceShouldBe_1_USDAfterAdding_2_INR() {
             Wallet wallet = new Wallet(Currency.USD);
@@ -202,18 +205,105 @@ class WalletTest {
 
             assertEquals(new Money(4, Currency.EUR), wallet.getBalance());
         }
-    }
 
-    @Nested
-    class BHT {
-        @Test
-        void balanceShouldBe_10_BHTAfterAdding_10_BHT() {
-            Wallet wallet = new Wallet(Currency.BHT);
-            Money bht10 = new Money(10, Currency.BHT);
+        @Nested
+        class BHT {
+            @Test
+            void balanceShouldBe_10_BHTAfterAdding_10_BHT() {
+                Wallet wallet = new Wallet(Currency.BHT);
+                Money bht10 = new Money(10, Currency.BHT);
 
-            wallet.deposit(bht10);
+                wallet.deposit(bht10);
 
-            assertEquals(bht10, wallet.getBalance());
+                assertEquals(bht10, wallet.getBalance());
+            }
+        }
+
+        @Nested
+        class Sort {
+            @Test
+            void shouldSortINRWalletsIntoAscendingOrder() {
+                List<Wallet> walletList = new ArrayList<>();
+                Money inr20 = new Money(20, Currency.INR);
+                Wallet inr20Wallet = new Wallet(Currency.INR);
+                inr20Wallet.deposit(inr20);
+                Money inr5 = new Money(5, Currency.INR);
+                Wallet inr5Wallet = new Wallet(Currency.INR);
+                inr5Wallet.deposit(inr5);
+                Money inr10 = new Money(10, Currency.INR);
+                Wallet inr10Wallet = new Wallet(Currency.INR);
+                inr10Wallet.deposit(inr10);
+                walletList.add(inr20Wallet);
+                walletList.add(inr5Wallet);
+                walletList.add(inr10Wallet);
+
+                List<Wallet> sortedWallets = Wallet.sort(walletList, "ASC");
+
+                assertEquals(List.of(inr5Wallet, inr10Wallet, inr20Wallet), sortedWallets);
+            }
+
+            @Test
+            void shouldSortWalletsHavingUSD_EUR_BHTIntoAscendingOrder() {
+                List<Wallet> walletList = new ArrayList<>();
+                Money usd1 = new Money(1, Currency.USD);
+                Wallet usd1Wallet = new Wallet(Currency.USD);
+                usd1Wallet.deposit(usd1);
+                Money bht1 = new Money(5, Currency.BHT);
+                Wallet bht1Wallet = new Wallet(Currency.BHT);
+                bht1Wallet.deposit(bht1);
+                Money eur1 = new Money(10, Currency.EUR);
+                Wallet eur1Wallet = new Wallet(Currency.EUR);
+                eur1Wallet.deposit(eur1);
+                walletList.add(usd1Wallet);
+                walletList.add(bht1Wallet);
+                walletList.add(eur1Wallet);
+
+                List<Wallet> sortedWallets = Wallet.sort(walletList, "ASC");
+
+                assertEquals(List.of(bht1Wallet, usd1Wallet, eur1Wallet), sortedWallets);
+            }
+
+            @Test
+            void shouldSortINRWalletsIntoDescendingOrder() {
+                List<Wallet> walletList = new ArrayList<>();
+                Money inr20 = new Money(20, Currency.INR);
+                Wallet inr20Wallet = new Wallet(Currency.INR);
+                inr20Wallet.deposit(inr20);
+                Money inr5 = new Money(5, Currency.INR);
+                Wallet inr5Wallet = new Wallet(Currency.INR);
+                inr5Wallet.deposit(inr5);
+                Money inr10 = new Money(10, Currency.INR);
+                Wallet inr10Wallet = new Wallet(Currency.INR);
+                inr10Wallet.deposit(inr10);
+                walletList.add(inr20Wallet);
+                walletList.add(inr5Wallet);
+                walletList.add(inr10Wallet);
+
+                List<Wallet> sortedWallets = Wallet.sort(walletList, "DESC");
+
+                assertEquals(List.of(inr20Wallet, inr10Wallet, inr5Wallet), sortedWallets);
+            }
+
+            @Test
+            void shouldSortWalletsHavingUSD_EUR_BHTIntoDescendingOrder() {
+                List<Wallet> walletList = new ArrayList<>();
+                Money usd1 = new Money(1, Currency.USD);
+                Wallet usd1Wallet = new Wallet(Currency.USD);
+                usd1Wallet.deposit(usd1);
+                Money bht1 = new Money(5, Currency.BHT);
+                Wallet bht1Wallet = new Wallet(Currency.BHT);
+                bht1Wallet.deposit(bht1);
+                Money eur1 = new Money(10, Currency.EUR);
+                Wallet eur1Wallet = new Wallet(Currency.EUR);
+                eur1Wallet.deposit(eur1);
+                walletList.add(usd1Wallet);
+                walletList.add(bht1Wallet);
+                walletList.add(eur1Wallet);
+
+                List<Wallet> sortedWallets = Wallet.sort(walletList, "DESC");
+
+                assertEquals(List.of(eur1Wallet, usd1Wallet, bht1Wallet), sortedWallets);
+            }
         }
     }
 }

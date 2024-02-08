@@ -1,5 +1,8 @@
 package org.example.wallet;
 
+import java.util.Comparator;
+import java.util.List;
+
 public class Wallet {
     private Money balance;
 
@@ -9,6 +12,14 @@ public class Wallet {
 
     public void deposit(Money money) {
         this.balance = balance.add(money);
+    }
+
+    public static List<Wallet> sort(List<Wallet> walletList, String order) {
+        List<Wallet> ascSortedWalletlist = walletList.stream().sorted(Comparator.comparing(wallet -> wallet.balance)).toList();
+        if (order.equals("DESC")) {
+            return ascSortedWalletlist.reversed();
+        }
+        return ascSortedWalletlist;
     }
 
     //TODO: deduct money
