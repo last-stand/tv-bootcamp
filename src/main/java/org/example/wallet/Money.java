@@ -12,12 +12,7 @@ public class Money {
     }
 
     public Money add(Money other) {
-        return new Money(this.amount + convertTo(other.amount, other.currency), this.currency);
-    }
-
-    private int convertTo(int amount, Currency currency) {
-        int inrValue = amount * currency.getConversionRate();
-        return inrValue / this.currency.getConversionRate();
+        return new Money(this.amount + currency.convertTo(other.amount, other.currency), this.currency);
     }
 
     @Override
@@ -26,10 +21,5 @@ public class Money {
         if (o == null || getClass() != o.getClass()) return false;
         Money money = (Money) o;
         return amount == money.amount && Objects.equals(currency, money.currency);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(amount, currency);
     }
 }

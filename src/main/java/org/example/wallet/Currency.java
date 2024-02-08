@@ -10,7 +10,16 @@ public class Currency {
         this.conversionRate = conversionRate;
     }
 
-    public int getConversionRate() {
-        return conversionRate;
+    public int convertTo(int amount, Currency other) {
+        int inrValue = toINR(amount, other);
+        return fromINR(inrValue);
+    }
+
+    private int fromINR(int inrValue) {
+        return inrValue / conversionRate;
+    }
+
+    private static int toINR(int amount, Currency other) {
+        return amount * other.conversionRate;
     }
 }
