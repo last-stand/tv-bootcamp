@@ -2,7 +2,7 @@ package org.example.wallet;
 
 import java.util.Objects;
 
-public class Money {
+public class Money implements Comparable<Money> {
     private final int amount;
     private final Currency currency;
 
@@ -21,5 +21,11 @@ public class Money {
         if (o == null || getClass() != o.getClass()) return false;
         Money money = (Money) o;
         return amount == money.amount && Objects.equals(currency, money.currency);
+    }
+
+    @Override
+    public int compareTo(Money other) {
+        int convertedAmount = currency.convertTo(other.amount, other.currency);
+        return Integer.compare(amount, convertedAmount);
     }
 }
