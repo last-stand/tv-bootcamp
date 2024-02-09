@@ -237,7 +237,7 @@ class WalletTest {
                 walletList.add(inr5Wallet);
                 walletList.add(inr10Wallet);
 
-                List<Wallet> sortedWallets = Wallet.sort(walletList, "ASC");
+                List<Wallet> sortedWallets = Wallet.sort(walletList, Wallet.ASC_ORDER_COMPARATOR);
 
                 assertEquals(List.of(inr5Wallet, inr10Wallet, inr20Wallet), sortedWallets);
             }
@@ -248,17 +248,17 @@ class WalletTest {
                 Money usd1 = new Money(1, Currency.USD);
                 Wallet usd1Wallet = new Wallet(Currency.USD);
                 usd1Wallet.deposit(usd1);
-                Money bht1 = new Money(5, Currency.BHT);
+                Money bht1 = new Money(1, Currency.BHT);
                 Wallet bht1Wallet = new Wallet(Currency.BHT);
                 bht1Wallet.deposit(bht1);
-                Money eur1 = new Money(10, Currency.EUR);
+                Money eur1 = new Money(1, Currency.EUR);
                 Wallet eur1Wallet = new Wallet(Currency.EUR);
                 eur1Wallet.deposit(eur1);
                 walletList.add(usd1Wallet);
                 walletList.add(bht1Wallet);
                 walletList.add(eur1Wallet);
 
-                List<Wallet> sortedWallets = Wallet.sort(walletList, "ASC");
+                List<Wallet> sortedWallets = Wallet.sort(walletList, Wallet.ASC_ORDER_COMPARATOR);
 
                 assertEquals(List.of(bht1Wallet, usd1Wallet, eur1Wallet), sortedWallets);
             }
@@ -279,7 +279,7 @@ class WalletTest {
                 walletList.add(inr5Wallet);
                 walletList.add(inr10Wallet);
 
-                List<Wallet> sortedWallets = Wallet.sort(walletList, "DESC");
+                List<Wallet> sortedWallets = Wallet.sort(walletList, Wallet.DESC_ORDER_COMPARATOR);
 
                 assertEquals(List.of(inr20Wallet, inr10Wallet, inr5Wallet), sortedWallets);
             }
@@ -300,7 +300,7 @@ class WalletTest {
                 walletList.add(bht1Wallet);
                 walletList.add(eur1Wallet);
 
-                List<Wallet> sortedWallets = Wallet.sort(walletList, "DESC");
+                List<Wallet> sortedWallets = Wallet.sort(walletList, Wallet.DESC_ORDER_COMPARATOR);
 
                 assertEquals(List.of(eur1Wallet, usd1Wallet, bht1Wallet), sortedWallets);
             }

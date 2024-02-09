@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Wallet {
+    public static final Comparator<Wallet> ASC_ORDER_COMPARATOR = Comparator.comparing(wallet -> wallet.balance);
+    public static final Comparator<Wallet> DESC_ORDER_COMPARATOR = ASC_ORDER_COMPARATOR.reversed();
     private Money balance;
 
     public Wallet(Currency currency) {
@@ -14,12 +16,8 @@ public class Wallet {
         this.balance = balance.add(money);
     }
 
-    public static List<Wallet> sort(List<Wallet> walletList, String order) {
-        List<Wallet> ascSortedWalletlist = walletList.stream().sorted(Comparator.comparing(wallet -> wallet.balance)).toList();
-        if (order.equals("DESC")) {
-            return ascSortedWalletlist.reversed();
-        }
-        return ascSortedWalletlist;
+    public static List<Wallet> sort(List<Wallet> walletList, Comparator<Wallet> comparator) {
+        return walletList.stream().sorted(comparator).toList();
     }
 
     //TODO: deduct money
