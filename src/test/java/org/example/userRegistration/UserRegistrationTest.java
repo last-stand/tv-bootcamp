@@ -10,7 +10,8 @@ class UserRegistrationTest {
     void shouldSendEmailToRegisteredUserIfNotificationPreferenceIsEmail() {
         User user = new User("Admin", "admin@email.com", "9876543210", NotificationPreference.EMAIL);
         NotifierStub emailNotifier = new NotifierStub();
-        UserRegistration userRegistration = new UserRegistration(emailNotifier, new NotifierStub());
+        NotifierStub smsNotifier = new NotifierStub();
+        UserRegistration userRegistration = new UserRegistration(new NotifierFactory(emailNotifier, smsNotifier));
 
         userRegistration.register(user);
 
@@ -22,7 +23,8 @@ class UserRegistrationTest {
     void shouldSendEmailToRegisteredUserEmailIfNotificationPreferenceIsEmail() {
         User user = new User("Admin", "admin@email.com", "9876543210", NotificationPreference.EMAIL);
         NotifierStub emailNotifier = new NotifierStub();
-        UserRegistration userRegistration = new UserRegistration(emailNotifier, new NotifierStub());
+        NotifierStub smsNotifier = new NotifierStub();
+        UserRegistration userRegistration = new UserRegistration(new NotifierFactory(emailNotifier, smsNotifier));
 
         userRegistration.register(user);
 
@@ -33,7 +35,8 @@ class UserRegistrationTest {
     void shouldSendSMSToRegisteredUserIfNotificationPreferenceIsSMS() {
         User user = new User("Admin", "admin@email.com", "9876543210", NotificationPreference.SMS);
         NotifierStub smsNotifier = new NotifierStub();
-        UserRegistration userRegistration = new UserRegistration(new NotifierStub(), smsNotifier);
+        NotifierStub emailNotifier = new NotifierStub();
+        UserRegistration userRegistration = new UserRegistration(new NotifierFactory(emailNotifier, smsNotifier));
 
         userRegistration.register(user);
 
@@ -45,20 +48,25 @@ class UserRegistrationTest {
     void shouldSendSMSToRegisteredUserPhoneNumberIfNotificationPreferenceIsSMS() {
         User user = new User("Admin", "admin@email.com", "9876543210", NotificationPreference.SMS);
         NotifierStub smsNotifier = new NotifierStub();
-        UserRegistration userRegistration = new UserRegistration(new NotifierStub(), smsNotifier);
+        NotifierStub emailNotifier = new NotifierStub();
+        UserRegistration userRegistration = new UserRegistration(new NotifierFactory(emailNotifier, smsNotifier));
 
         userRegistration.register(user);
 
         assertEquals("9876543210", smsNotifier.getRecipient());
     }
+
     @Test
     void shouldNotSendEmailIfNotificationPreferenceIsSMS() {
         User user = new User("Admin", "admin@email.com", "9876543210", NotificationPreference.SMS);
         NotifierStub smsNotifier = new NotifierStub();
         NotifierStub emailNotifier = new NotifierStub();
-        UserRegistration userRegistration = new UserRegistration(emailNotifier, smsNotifier);
+        NotifierFactory notifierFactory = new NotifierFactory(emailNotifier, smsNotifier);
+        UserRegistration userRegistration = new UserRegistration(notifierFactory);
 
         userRegistration.register(user);
+
+        assertFalse(emailNotifier.isSent());
     }
 
     private class NotifierStub implements Notifier{

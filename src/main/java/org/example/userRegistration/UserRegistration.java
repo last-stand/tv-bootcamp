@@ -1,21 +1,17 @@
 package org.example.userRegistration;
 
 public class UserRegistration {
-    private Notifier emailNotifier;
-    private Notifier smsNotifier;
-    private Notifier notifier;
+    private final NotifierFactory notifierFactory;
 
-    public UserRegistration(Notifier emailNotifier, Notifier smsNotifier) {
-        this.emailNotifier = emailNotifier;
-        this.smsNotifier = smsNotifier;
+    public UserRegistration(NotifierFactory notifierFactory) {
+        this.notifierFactory = notifierFactory;
     }
 
     public void register(User user) {
         System.out.println("User is registered successfully");
-        if (user.getNotificationPreference().equals(NotificationPreference.EMAIL)) {
-            emailNotifier.sendNotification(user.getEmail());
-        } else {
-            smsNotifier.sendNotification(user.getPhone());
-        }
+        Notifier notifier = notifierFactory.getNotifier(user.getNotificationPreference());
+        String recipient = user.getNotificationPreference().equals(NotificationPreference.EMAIL) ? user.getEmail() : user.getPhone();
+        notifier.sendNotification(recipient);
     }
+
 }
