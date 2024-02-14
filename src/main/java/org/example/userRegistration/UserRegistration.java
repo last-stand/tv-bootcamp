@@ -9,7 +9,7 @@ public class UserRegistration {
 
     public void register(User user) {
         System.out.println("User is registered successfully");
-        Notifier notifier = notifierFactory.getNotifier(user.getNotificationPreference());
+        Notifier<String> notifier = notifierFactory.getNotifier(user.getNotificationPreference());
         String recipient = user.getNotificationPreference().equals(NotificationPreference.EMAIL) ? user.getEmail() : user.getPhone();
         notifier.sendNotification(recipient);
     }

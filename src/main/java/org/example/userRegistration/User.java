@@ -4,7 +4,7 @@ public class User {
     private final String name;
     private final String email;
     private final String phone;
-    private NotificationPreference notificationPreference;
+    private final NotificationPreference notificationPreference;
 
     public User(String name, String email, String phone, NotificationPreference notificationPreference) {
         this.name = name;
